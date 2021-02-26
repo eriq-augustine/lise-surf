@@ -1,14 +1,3 @@
-/*  This visualization was made possible by modifying code provided by:
-
-Scott Murray, Choropleth example from "Interactive Data Visualization for the Web"
-https://github.com/alignedleft/d3-book/blob/master/chapter_12/05_choropleth.html
-
-Malcolm Maclean, tooltips example tutorial
-http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
-
-Mike Bostock, Pie Chart Legend
-http://bl.ocks.org/mbostock/3888852  */
-
 const MAP_PATH = 'us-states.geojson';
 const LOG_PATH = 'surf-log.txt';
 
@@ -52,12 +41,11 @@ const BEACHES = {
     'Santa Cruz - Cowells': [36.961652895291216, -122.0249019288201],
     'SLO - Pismo': [35.12731946915043, -120.63812757602244],
     'Ventura - C-Street': [34.27463717426635, -119.29935863867594],
-
 }
 
 const START_TIME_MS = 1591920000 * 1000;
 const END_TIME_MS = 1622505600 * 1000;
-const TOTAL_DURATION_MS = 60 * 1000;
+const TOTAL_DURATION_MS = 120 * 1000;
 const CIRCLE_TRAVEL_DURATION_MS = 3000;
 
 const START_POINT = [34.43396101204887, -123.18522149376697];
@@ -91,9 +79,18 @@ function main() {
             .duration(timeScale.range()[1])
             .tween("date", function() {
                 let indexFunction = d3.interpolateDate(...timeScale.domain());
+                let startMS = timeScale.domain()[0].getTime();
+                let endMS = timeScale.domain()[1].getTime();
+                let durationMS = endMS - startMS;
+
                 return function(elapsedTime) {
+                    let passedTimeMS = elapsedTime * durationMS;
+                    let days = Math.trunc(passedTimeMS / 1000 / 60 / 60 / 24);
+
+                    let date = dateFormatter(indexFunction(elapsedTime));
+
                     d3.select('.date')
-                            .text(dateFormatter(indexFunction(elapsedTime)));
+                            .text(`Day ${days} -- ${date}`);
                 }
             });
 
