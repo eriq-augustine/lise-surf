@@ -13,16 +13,19 @@ const MAP_PATH = 'us-states.geojson';
 const LOG_PATH = 'surf-log.txt';
 
 const WIDTH = 960;
-const HEIGHT = 500;
+const HEIGHT = 600;
 
-const CENTER_X = 1050;
-const CENTER_Y = 300;
+const CENTER_X = 1450;
+const CENTER_Y = 350;
 
-const SCALE = 2000;
+const SCALE = 2750;
 
 const CALIFORNIA_COLOR = 'rgb(69, 173, 168)';
 const GREY = 'rgb(213, 222, 217)';
+
 const CIRCLE_COLOR = 'rgb(217, 91, 67)';
+const CIRCLE_RADIUS = 10;
+const CIRCLE_OPACITY = 0.20;
 
 const STROKE_WIDTH = '4px';
 const STROKE_COLOR = '#fff';
@@ -55,6 +58,9 @@ const BEACHES = {
 const START_TIME_MS = 1591920000 * 1000;
 const END_TIME_MS = 1622505600 * 1000;
 const TOTAL_DURATION_MS = 60 * 1000;
+const CIRCLE_TRAVEL_DURATION_MS = 3000;
+
+const START_POINT = [34.43396101204887, -123.18522149376697];
 
 const DATE_FORMAT = '%a %B %d %Y';
 
@@ -74,11 +80,12 @@ function main() {
     const dateFormatter = d3.timeFormat(DATE_FORMAT);
 
     // Create an SVG element and append map to the SVG.
-    var svg = d3.select("body")
+    let svg = d3.select("body")
             .append("svg")
             .attr("width", WIDTH)
             .attr("height", HEIGHT);
 
+    // Update the date.
     svg.transition()
             .ease(d3.easeLinear)
             .duration(timeScale.range()[1])
@@ -86,7 +93,7 @@ function main() {
                 let indexFunction = d3.interpolateDate(...timeScale.domain());
                 return function(elapsedTime) {
                     d3.select('.date')
-                            .text(d3.timeDay(indexFunction(elapsedTime)));
+                            .text(dateFormatter(indexFunction(elapsedTime)));
                 }
             });
 
@@ -132,11 +139,16 @@ function main() {
                 // Schedule each datapoint to appear according to its date and the specified timescale.
                 d3.timeout(function() {
                     svg.append("circle")
-                            .attr("cx", projection([renderEntry.longitude, renderEntry.latitude])[0])
-                            .attr("cy", projection([renderEntry.longitude, renderEntry.latitude])[1])
-                            .attr("r", 10)
+                            .attr("cx", projection([START_POINT[1], START_POINT[0]])[0])
+                            .attr("cy", projection([START_POINT[1], START_POINT[0]])[1])
+                            .attr("r", CIRCLE_RADIUS)
                             .style("fill", CIRCLE_COLOR)
-                            .style("opacity", 0.20);
+                            .style("opacity", CIRCLE_OPACITY)
+                            .transition()
+                                .duration(CIRCLE_TRAVEL_DURATION_MS)
+                                .attr("cx", projection([renderEntry.longitude, renderEntry.latitude])[0])
+                                .attr("cy", projection([renderEntry.longitude, renderEntry.latitude])[1])
+
                 }, timeScale(new Date(renderEntry.date * 1000)));
             });
         });
