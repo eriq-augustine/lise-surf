@@ -1,4 +1,4 @@
-const MAP_PATH = 'us-states.geojson';
+const MAP_PATH = 'combined-states-counties.geojson';
 const LOG_PATH = 'surf-log.txt';
 
 const WIDTH = 960;
@@ -16,8 +16,11 @@ const CIRCLE_COLOR = 'rgb(217, 91, 67)';
 const CIRCLE_RADIUS = 10;
 const CIRCLE_OPACITY = 0.20;
 
-const STROKE_WIDTH = '4px';
-const STROKE_COLOR = '#fff';
+const STATE_STROKE_WIDTH = '4px';
+const STATE_STROKE_COLOR = '#fff';
+
+const COUNTY_STROKE_WIDTH = '1px';
+const COUNTY_STROKE_COLOR = '#eee';
 
 const ORIGIN_IMAGE_WIDTH = 150;
 const ORIGIN_IMAGE_HEIGHT = 150;
@@ -115,15 +118,27 @@ function main() {
                 .enter()
                 .append("path")
                 .attr("d", pathGenerator)
-                .style("stroke", STROKE_COLOR)
-                .style("stroke-width", STROKE_WIDTH)
-                .style("fill", function(stateMapData) {
-                    if (stateMapData.properties.name === 'California') {
+                .style("stroke-width", function(mapData) {
+                    if (mapData.area_type == 'state') {
+                        return STATE_STROKE_WIDTH;
+                    } else {
+                        return COUNTY_STROKE_WIDTH;
+                    }
+                })
+                .style("stroke", function(mapData) {
+                    if (mapData.area_type == 'state') {
+                        return STATE_STROKE_COLOR;
+                    } else {
+                        return COUNTY_STROKE_COLOR;
+                    }
+                })
+                .style("fill", function(mapData) {
+                    if (mapData.properties.name === 'California' || mapData.area_type == 'county') {
                         return CALIFORNIA_COLOR;
                     } else {
                         return GREY;
                     }
-        });
+                })
 
         // Load the log.
         d3.tsv(LOG_PATH).then(function(surfLog) {
