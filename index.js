@@ -19,6 +19,9 @@ const CIRCLE_OPACITY = 0.20;
 const STROKE_WIDTH = '4px';
 const STROKE_COLOR = '#fff';
 
+const ORIGIN_IMAGE_WIDTH = 150;
+const ORIGIN_IMAGE_HEIGHT = 150;
+
 const BEACHES = {
     'Capitola - Breakwater': [36.9721835406375, -121.95171971878953],
     'Dana Point - SaltCreek': [33.47833708183752, -117.72330055840274],
@@ -48,7 +51,7 @@ const END_TIME_MS = 1622505600 * 1000;
 const TOTAL_DURATION_MS = 120 * 1000;
 const CIRCLE_TRAVEL_DURATION_MS = 3000;
 
-const START_POINT = [34.43396101204887, -123.18522149376697];
+const ORIGIN_POINT = [33, -126];
 
 const DATE_FORMAT = '%a %B %d %Y';
 
@@ -72,6 +75,16 @@ function main() {
             .append("svg")
             .attr("width", WIDTH)
             .attr("height", HEIGHT);
+
+    // Add in the origin image.
+    svg.append('image')
+            .attr('id', 'origin-image')
+            .attr('xlink:href', 'images/lise_getoor_circle.png')
+            .attr('x', projection([ORIGIN_POINT[1], ORIGIN_POINT[0]])[0] - ORIGIN_IMAGE_WIDTH / 2)
+            .attr('y', projection([ORIGIN_POINT[1], ORIGIN_POINT[0]])[1] - ORIGIN_IMAGE_HEIGHT / 2)
+            .attr('width', ORIGIN_IMAGE_WIDTH)
+            .attr('height', ORIGIN_IMAGE_HEIGHT)
+    ;
 
     // Update the date.
     svg.transition()
@@ -136,8 +149,8 @@ function main() {
                 // Schedule each datapoint to appear according to its date and the specified timescale.
                 d3.timeout(function() {
                     svg.append("circle")
-                            .attr("cx", projection([START_POINT[1], START_POINT[0]])[0])
-                            .attr("cy", projection([START_POINT[1], START_POINT[0]])[1])
+                            .attr("cx", projection([ORIGIN_POINT[1], ORIGIN_POINT[0]])[0])
+                            .attr("cy", projection([ORIGIN_POINT[1], ORIGIN_POINT[0]])[1])
                             .attr("r", CIRCLE_RADIUS)
                             .style("fill", CIRCLE_COLOR)
                             .style("opacity", CIRCLE_OPACITY)
@@ -145,6 +158,9 @@ function main() {
                                 .duration(CIRCLE_TRAVEL_DURATION_MS)
                                 .attr("cx", projection([renderEntry.longitude, renderEntry.latitude])[0])
                                 .attr("cy", projection([renderEntry.longitude, renderEntry.latitude])[1])
+
+                    // Keep the origin image on the top.
+                    svg.select('#origin-image').raise();
 
                 }, timeScale(new Date(renderEntry.date * 1000)));
             });
