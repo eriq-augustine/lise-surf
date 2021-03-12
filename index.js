@@ -29,6 +29,7 @@ const END_TIME_MS = START_TIME_MS + (TOTAL_DAYS * 24 * 60 * 60 * 1000);
 const SECONDS_PER_DAY = 2;
 const TOTAL_DURATION_MS = SECONDS_PER_DAY * 365 * 1000;
 const TRAVELER_TRAVEL_DURATION_MS = SECONDS_PER_DAY * 1000;
+const TRAVELER_DELAY_BEFORE_REMOVE_MS = 500;
 
 const ORIGIN_IMAGE_PATH = 'images/lise_getoor_circle.png';
 const ORIGIN_IMAGE_WIDTH = 150;
@@ -199,7 +200,9 @@ function main() {
                                 .attr('x', targetX)
                                 .attr('y', targetY)
                                 .attr('transform', `rotate(${angle}, ${targetX}, ${targetY})`)
-                                .remove()
+                                .transition()
+                                    .duration(TRAVELER_DELAY_BEFORE_REMOVE_MS)
+                                    .remove()
                     ;
 
                     if (county) {
