@@ -81,28 +81,6 @@ function main() {
             .attr('height', ORIGIN_IMAGE_HEIGHT)
     ;
 
-    // Update the date.
-    svg.transition()
-            .ease(d3.easeLinear)
-            .duration(timeScale.range()[1])
-            .tween('date', function() {
-                let indexFunction = d3.interpolateDate(...timeScale.domain());
-                let startMS = timeScale.domain()[0].getTime();
-                let endMS = timeScale.domain()[1].getTime();
-                let durationMS = endMS - startMS;
-
-                return function(elapsedTime) {
-                    let passedTimeMS = elapsedTime * durationMS;
-                    let days = Math.trunc(passedTimeMS / 1000 / 60 / 60 / 24);
-
-                    let date = dateFormatter(indexFunction(elapsedTime));
-
-                    d3.select('.date')
-                            .text(`Day ${days} -- ${date}`);
-                }
-            })
-    ;
-
     // Load GeoJSON data and merge with states data
     d3.json(MAP_PATH).then(function(mapGeoJSON) {
         // Bind the data to the SVG and create one path per GeoJSON feature.
@@ -146,8 +124,11 @@ function main() {
         // Load the log.
         d3.tsv(LOG_PATH).then(function(surfLog) {
             let renderData = [];
+            let dayCount = 0;
 
             surfLog.forEach(function(logEntry) {
+                dayCount++;
+
                 if (!(logEntry.location in BEACHES)) {
                     console.log("Unable to find beach: '" + logEntry.location + "'.");
                     return;
@@ -157,8 +138,10 @@ function main() {
 
                 renderData.push({
                     'id': renderData.length,
-                    'date': logEntry.date,
+                    'dayCount': dayCount,
+                    'timestamp': logEntry.date,
                     'name': beach.name,
+                    'city': beach.city,
                     'county': beach.county,
                     'latitude': beach.coordinates[0],
                     'longitude': beach.coordinates[1],
@@ -205,6 +188,14 @@ function main() {
                                     .remove()
                     ;
 
+                    // Update the info area.
+                    document.querySelector('.info-area .date').textContent = dateFormatter(renderEntry.timestamp * 1000);
+                    document.querySelector('.info-area .day').textContent = renderEntry.dayCount;
+                    document.querySelector('.info-area .beach').textContent = renderEntry.name;
+                    document.querySelector('.info-area .city').textContent = renderEntry.city;
+                    document.querySelector('.info-area .county').textContent = renderEntry.county;
+
+                    // Update the county color.
                     if (county) {
                         let count = parseInt(county.dataset.visitCount, 10) + 1;
                         county.setAttribute('data-visitCount', count);
@@ -214,7 +205,7 @@ function main() {
                     // Keep the origin image on the top.
                     svg.select('#origin-image').raise();
 
-                }, timeScale(new Date(renderEntry.date * 1000)));
+                }, timeScale(new Date(renderEntry.timestamp * 1000)));
             });
         });
     });

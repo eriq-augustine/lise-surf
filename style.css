@@ -1,8 +1,12 @@
-.date {
+.info-area {
+    position: absolute;
+    width: 400px;
+    margin-top: 20px;
+    margin-left: 20px;
     font-family: monospace;
 }
 
-/* On mouse hover, lighten a state color. */
-path:hover {
-	fill-opacity: 0.7;
+.info-area p {
+    display: inline-block;
+    margin: 0;
 }
