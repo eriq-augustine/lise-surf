@@ -18,30 +18,6 @@ const STATE_STROKE_COLOR = '#fff';
 const COUNTY_STROKE_WIDTH = '1px';
 const COUNTY_STROKE_COLOR = '#eee';
 
-const BEACHES = {
-    'Capitola - Breakwater': [36.9721835406375, -121.95171971878953],
-    'Dana Point - SaltCreek': [33.47833708183752, -117.72330055840274],
-    'Del Mar - 15th': [32.95892175127866, -117.26831689292193],
-    'Del Mar - Del Mar': [32.96000550231709, -117.26854577016191],
-    'Encinitas - Pipes': [33.0240490454094, -117.28656341419166],
-    'Encinitas - Turtles': [33.04874896287073, -117.29794587833848],
-    'Malibu - Broad Beach': [34.0374162149384, -118.86739705632482],
-    'Malibu - Malibu': [34.04001756197459, -118.65728553962593],
-    'Pleasure Point - 36th': [36.95738308808722, -121.96966207938021],
-    'Pleasure Point - Jacks': [36.95820670334518, -121.96891832511201],
-    'Pleasure Point - Privates': [36.967166804956946, -121.96048755807334],
-    'Pleasure Point - Sharks': [36.962384574001725, -121.97524423726465],
-    'San Diego - Cardiff': [33.010901005977644, -117.27988761034455],
-    'San Diego - La Jolla': [32.855775803812634, -117.27226320793417],
-    'San Onofre - San Onofre State Beach': [33.373250811708836, -117.56567295668879],
-    'San Onofre - Trails': [33.37678061969037, -117.56926950420862],
-    'Santa Barbara - Campus Point': [34.406593860722225, -119.84358164981026],
-    'Santa Barbara - Rincon': [34.35057749621006, -119.41066780480162],
-    'Santa Cruz - Cowells': [36.961652895291216, -122.0249019288201],
-    'SLO - Pismo': [35.12731946915043, -120.63812757602244],
-    'Ventura - C-Street': [34.27463717426635, -119.29935863867594],
-}
-
 const TOTAL_DAYS = 365;
 const START_TIME_MS = 1591920000 * 1000;
 const END_TIME_MS = START_TIME_MS + (TOTAL_DAYS * 24 * 60 * 60 * 1000);
@@ -148,19 +124,21 @@ function main() {
             let renderData = [];
 
             surfLog.forEach(function(logEntry) {
-                if (logEntry.location in BEACHES) {
-                    let coordinates = BEACHES[logEntry.location];
-
-                    renderData.push({
-                        'id': renderData.length,
-                        'date': logEntry.date,
-                        'name': logEntry.location,
-                        'latitude': coordinates[0],
-                        'longitude': coordinates[1],
-                    });
-                } else {
+                if (!(logEntry.location in BEACHES)) {
                     console.log("Unable to find beach: '" + logEntry.location + "'.");
+                    return;
                 }
+
+                let beach = BEACHES[logEntry.location];
+
+                renderData.push({
+                    'id': renderData.length,
+                    'date': logEntry.date,
+                    'name': beach.name,
+                    'county': beach.county,
+                    'latitude': beach.coordinates[0],
+                    'longitude': beach.coordinates[1],
+                });
             });
 
             // Go through log entries one at a time.
