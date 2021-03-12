@@ -26,7 +26,7 @@ const COUNTY_STROKE_COLOR = '#eee';
 const TOTAL_DAYS = 365;
 const START_TIME_MS = 1591920000 * 1000;
 const END_TIME_MS = START_TIME_MS + (TOTAL_DAYS * 24 * 60 * 60 * 1000);
-const SECONDS_PER_DAY = 0.2;
+const SECONDS_PER_DAY = 2;
 const TOTAL_DURATION_MS = SECONDS_PER_DAY * 365 * 1000;
 const TRAVELER_TRAVEL_DURATION_MS = SECONDS_PER_DAY * 1000;
 
@@ -199,6 +199,7 @@ function main() {
                                 .attr('x', targetX)
                                 .attr('y', targetY)
                                 .attr('transform', `rotate(${angle}, ${targetX}, ${targetY})`)
+                                .remove()
                     ;
 
                     if (county) {
