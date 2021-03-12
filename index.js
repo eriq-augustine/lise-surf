@@ -152,6 +152,7 @@ function main() {
                     let coordinates = BEACHES[logEntry.location];
 
                     renderData.push({
+                        'id': renderData.length,
                         'date': logEntry.date,
                         'name': logEntry.location,
                         'latitude': coordinates[0],
@@ -164,18 +165,33 @@ function main() {
 
             // Go through log entries one at a time.
             renderData.forEach(function(renderEntry) {
+                // Project onto the map.
+                let [sourceX, sourceY] = projection([ORIGIN_POINT[1], ORIGIN_POINT[0]]);
+                let [targetX, targetY] = projection([renderEntry.longitude, renderEntry.latitude]);
+
+                // Adjust for the image dimensions.
+                [sourceX, sourceY] = [sourceX - TRAVELER_IMAGE_WIDTH / 2, sourceY - TRAVELER_IMAGE_HEIGHT / 2];
+                [targetX, targetY] = [targetX - TRAVELER_IMAGE_WIDTH / 2, targetY - TRAVELER_IMAGE_HEIGHT / 2];
+
+                // Swap the Y sign, since down is positive.
+                let angleRadians = Math.PI / 2.0 - Math.atan(-(targetY - sourceY) / (targetX - sourceX));
+                let angle = angleRadians * 180.0 / Math.PI;
+
                 // Schedule each datapoint to appear according to its date and the specified timescale.
                 d3.timeout(function() {
                     svg.append('image')
                             .attr('xlink:href', TRAVELER_IMAGE_PATH)
-                            .attr('x', projection([ORIGIN_POINT[1], ORIGIN_POINT[0]])[0])
-                            .attr('y', projection([ORIGIN_POINT[1], ORIGIN_POINT[0]])[1])
                             .attr('width', TRAVELER_IMAGE_WIDTH)
                             .attr('height', TRAVELER_IMAGE_HEIGHT)
+                            .attr('transform', `rotate(${angle}, ${sourceX}, ${sourceY})`)
+                            .attr('x', sourceX)
+                            .attr('y', sourceY)
                             .transition()
                                 .duration(TRAVELER_TRAVEL_DURATION_MS)
-                                .attr('x', projection([renderEntry.longitude, renderEntry.latitude])[0])
-                                .attr('y', projection([renderEntry.longitude, renderEntry.latitude])[1])
+                                .attr('x', targetX)
+                                .attr('y', targetY)
+                                .attr('transform', `rotate(${angle}, ${targetX}, ${targetY})`)
+                    ;
 
                     // Keep the origin image on the top.
                     svg.select('#origin-image').raise();
