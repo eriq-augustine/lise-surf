@@ -9,8 +9,11 @@ const CENTER_Y = 350;
 
 const SCALE = 2750;
 
-const CALIFORNIA_COLOR = 'rgb(69, 173, 168)';
-const GREY = 'rgb(213, 222, 217)';
+const COUNTY_BASE_COLOR = '#45ADA8FF';
+const COUNTY_START_COLOR = '#00C3FF';
+const COUNTY_END_COLOR = '#FFFF1C';
+const GREY = '#D5DED9';
+const MAX_COUNTY_SCALE_COUNT = 100;
 
 const STATE_STROKE_WIDTH = '4px';
 const STATE_STROKE_COLOR = '#fff';
@@ -21,7 +24,7 @@ const COUNTY_STROKE_COLOR = '#eee';
 const TOTAL_DAYS = 365;
 const START_TIME_MS = 1591920000 * 1000;
 const END_TIME_MS = START_TIME_MS + (TOTAL_DAYS * 24 * 60 * 60 * 1000);
-const SECONDS_PER_DAY = 2;
+const SECONDS_PER_DAY = 0.2;
 const TOTAL_DURATION_MS = SECONDS_PER_DAY * 365 * 1000;
 const TRAVELER_TRAVEL_DURATION_MS = SECONDS_PER_DAY * 1000;
 
@@ -35,6 +38,10 @@ const TRAVELER_IMAGE_WIDTH = 30;
 const TRAVELER_IMAGE_HEIGHT = 30;
 
 const DATE_FORMAT = '%a %B %d %Y';
+
+function slugify(text) {
+    return text.toLowerCase().trim().replaceAll(/\s+/g, '-');
+}
 
 function main() {
     let projection = d3.geoAlbersUsa()
@@ -50,6 +57,10 @@ function main() {
             .range([0, TOTAL_DURATION_MS]);
 
     const dateFormatter = d3.timeFormat(DATE_FORMAT);
+
+    const countyColorScale = d3.scaleLinear()
+            .domain([0, MAX_COUNTY_SCALE_COUNT])
+            .range([COUNTY_START_COLOR, COUNTY_END_COLOR]);
 
     // Create an SVG element and append map to the SVG.
     let svg = d3.select('body')
@@ -113,11 +124,21 @@ function main() {
                 })
                 .style('fill', function(mapData) {
                     if (mapData.properties.name === 'California' || mapData.area_type == 'county') {
-                        return CALIFORNIA_COLOR;
+                        return COUNTY_BASE_COLOR;
                     } else {
                         return GREY;
                     }
                 })
+                .attr('id', function(mapData) {
+                    let name = slugify(mapData.properties.name);
+
+                    if (mapData.area_type == 'state') {
+                        return `state-${name}`;
+                    } else {
+                        return `county-${name}`;
+                    }
+                })
+                .attr('data-visitCount', 0)
 
         // Load the log.
         d3.tsv(LOG_PATH).then(function(surfLog) {
@@ -151,9 +172,16 @@ function main() {
                 [sourceX, sourceY] = [sourceX - TRAVELER_IMAGE_WIDTH / 2, sourceY - TRAVELER_IMAGE_HEIGHT / 2];
                 [targetX, targetY] = [targetX - TRAVELER_IMAGE_WIDTH / 2, targetY - TRAVELER_IMAGE_HEIGHT / 2];
 
+                // Compute the rotation angle.
                 // Swap the Y sign, since down is positive.
                 let angleRadians = Math.PI / 2.0 - Math.atan(-(targetY - sourceY) / (targetX - sourceX));
                 let angle = angleRadians * 180.0 / Math.PI;
+
+                let countyID = `county-${slugify(renderEntry.county)}`;
+                let county = document.querySelector(`#${countyID}`);
+                if (!county) {
+                    console.log(`Failed to locate county: "${renderEntry.county}" (${countyID}).`);
+                }
 
                 // Schedule each datapoint to appear according to its date and the specified timescale.
                 d3.timeout(function() {
@@ -170,6 +198,12 @@ function main() {
                                 .attr('y', targetY)
                                 .attr('transform', `rotate(${angle}, ${targetX}, ${targetY})`)
                     ;
+
+                    if (county) {
+                        let count = parseInt(county.dataset.visitCount, 10) + 1;
+                        county.setAttribute('data-visitCount', count);
+                        county.style.fill = countyColorScale(count);
+                    }
 
                     // Keep the origin image on the top.
                     svg.select('#origin-image').raise();
