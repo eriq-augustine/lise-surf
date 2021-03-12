@@ -12,18 +12,11 @@ const SCALE = 2750;
 const CALIFORNIA_COLOR = 'rgb(69, 173, 168)';
 const GREY = 'rgb(213, 222, 217)';
 
-const CIRCLE_COLOR = 'rgb(217, 91, 67)';
-const CIRCLE_RADIUS = 10;
-const CIRCLE_OPACITY = 0.20;
-
 const STATE_STROKE_WIDTH = '4px';
 const STATE_STROKE_COLOR = '#fff';
 
 const COUNTY_STROKE_WIDTH = '1px';
 const COUNTY_STROKE_COLOR = '#eee';
-
-const ORIGIN_IMAGE_WIDTH = 150;
-const ORIGIN_IMAGE_HEIGHT = 150;
 
 const BEACHES = {
     'Capitola - Breakwater': [36.9721835406375, -121.95171971878953],
@@ -49,12 +42,21 @@ const BEACHES = {
     'Ventura - C-Street': [34.27463717426635, -119.29935863867594],
 }
 
+const TOTAL_DAYS = 365;
 const START_TIME_MS = 1591920000 * 1000;
-const END_TIME_MS = 1622505600 * 1000;
-const TOTAL_DURATION_MS = 120 * 1000;
-const CIRCLE_TRAVEL_DURATION_MS = 3000;
+const END_TIME_MS = START_TIME_MS + (TOTAL_DAYS * 24 * 60 * 60 * 1000);
+const SECONDS_PER_DAY = 2;
+const TOTAL_DURATION_MS = SECONDS_PER_DAY * 365 * 1000;
+const TRAVELER_TRAVEL_DURATION_MS = SECONDS_PER_DAY * 1000;
 
+const ORIGIN_IMAGE_PATH = 'images/lise_getoor_circle.png';
+const ORIGIN_IMAGE_WIDTH = 150;
+const ORIGIN_IMAGE_HEIGHT = 150;
 const ORIGIN_POINT = [33, -126];
+
+const TRAVELER_IMAGE_PATH = 'images/surfboard.png';
+const TRAVELER_IMAGE_WIDTH = 30;
+const TRAVELER_IMAGE_HEIGHT = 30;
 
 const DATE_FORMAT = '%a %B %d %Y';
 
@@ -74,15 +76,15 @@ function main() {
     const dateFormatter = d3.timeFormat(DATE_FORMAT);
 
     // Create an SVG element and append map to the SVG.
-    let svg = d3.select("body")
-            .append("svg")
-            .attr("width", WIDTH)
-            .attr("height", HEIGHT);
+    let svg = d3.select('body')
+            .append('svg')
+            .attr('width', WIDTH)
+            .attr('height', HEIGHT);
 
     // Add in the origin image.
     svg.append('image')
             .attr('id', 'origin-image')
-            .attr('xlink:href', 'images/lise_getoor_circle.png')
+            .attr('xlink:href', ORIGIN_IMAGE_PATH)
             .attr('x', projection([ORIGIN_POINT[1], ORIGIN_POINT[0]])[0] - ORIGIN_IMAGE_WIDTH / 2)
             .attr('y', projection([ORIGIN_POINT[1], ORIGIN_POINT[0]])[1] - ORIGIN_IMAGE_HEIGHT / 2)
             .attr('width', ORIGIN_IMAGE_WIDTH)
@@ -93,7 +95,7 @@ function main() {
     svg.transition()
             .ease(d3.easeLinear)
             .duration(timeScale.range()[1])
-            .tween("date", function() {
+            .tween('date', function() {
                 let indexFunction = d3.interpolateDate(...timeScale.domain());
                 let startMS = timeScale.domain()[0].getTime();
                 let endMS = timeScale.domain()[1].getTime();
@@ -108,31 +110,32 @@ function main() {
                     d3.select('.date')
                             .text(`Day ${days} -- ${date}`);
                 }
-            });
+            })
+    ;
 
     // Load GeoJSON data and merge with states data
     d3.json(MAP_PATH).then(function(mapGeoJSON) {
         // Bind the data to the SVG and create one path per GeoJSON feature.
-        svg.selectAll("path")
+        svg.selectAll('path')
                 .data(mapGeoJSON.features)
                 .enter()
-                .append("path")
-                .attr("d", pathGenerator)
-                .style("stroke-width", function(mapData) {
+                .append('path')
+                .attr('d', pathGenerator)
+                .style('stroke-width', function(mapData) {
                     if (mapData.area_type == 'state') {
                         return STATE_STROKE_WIDTH;
                     } else {
                         return COUNTY_STROKE_WIDTH;
                     }
                 })
-                .style("stroke", function(mapData) {
+                .style('stroke', function(mapData) {
                     if (mapData.area_type == 'state') {
                         return STATE_STROKE_COLOR;
                     } else {
                         return COUNTY_STROKE_COLOR;
                     }
                 })
-                .style("fill", function(mapData) {
+                .style('fill', function(mapData) {
                     if (mapData.properties.name === 'California' || mapData.area_type == 'county') {
                         return CALIFORNIA_COLOR;
                     } else {
@@ -163,16 +166,16 @@ function main() {
             renderData.forEach(function(renderEntry) {
                 // Schedule each datapoint to appear according to its date and the specified timescale.
                 d3.timeout(function() {
-                    svg.append("circle")
-                            .attr("cx", projection([ORIGIN_POINT[1], ORIGIN_POINT[0]])[0])
-                            .attr("cy", projection([ORIGIN_POINT[1], ORIGIN_POINT[0]])[1])
-                            .attr("r", CIRCLE_RADIUS)
-                            .style("fill", CIRCLE_COLOR)
-                            .style("opacity", CIRCLE_OPACITY)
+                    svg.append('image')
+                            .attr('xlink:href', TRAVELER_IMAGE_PATH)
+                            .attr('x', projection([ORIGIN_POINT[1], ORIGIN_POINT[0]])[0])
+                            .attr('y', projection([ORIGIN_POINT[1], ORIGIN_POINT[0]])[1])
+                            .attr('width', TRAVELER_IMAGE_WIDTH)
+                            .attr('height', TRAVELER_IMAGE_HEIGHT)
                             .transition()
-                                .duration(CIRCLE_TRAVEL_DURATION_MS)
-                                .attr("cx", projection([renderEntry.longitude, renderEntry.latitude])[0])
-                                .attr("cy", projection([renderEntry.longitude, renderEntry.latitude])[1])
+                                .duration(TRAVELER_TRAVEL_DURATION_MS)
+                                .attr('x', projection([renderEntry.longitude, renderEntry.latitude])[0])
+                                .attr('y', projection([renderEntry.longitude, renderEntry.latitude])[1])
 
                     // Keep the origin image on the top.
                     svg.select('#origin-image').raise();
@@ -183,6 +186,6 @@ function main() {
     });
 }
 
-document.addEventListener("DOMContentLoaded", function(event) {
+document.addEventListener('DOMContentLoaded', function(event) {
     main();
 });
