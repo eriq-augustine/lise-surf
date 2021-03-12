@@ -1,3 +1,5 @@
+'use strict';
+
 const BEACHES = {
     "Breakwater": {
         "name": "Breakwater",

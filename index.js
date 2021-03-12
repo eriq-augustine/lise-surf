@@ -1,3 +1,5 @@
+'use strict';
+
 const MAP_PATH = 'combined-states-counties.geojson';
 const LOG_PATH = 'surf-log.txt';
 
