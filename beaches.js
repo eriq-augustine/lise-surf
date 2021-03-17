@@ -8,7 +8,7 @@ const BEACHES = {
         "coordinates": [36.9721835406375, -121.95171971878953]
     },
     "SaltCreek": {
-        "name": "SaltCreek",
+        "name": "Salt Creek",
         "city": "Dana Point",
         "county": "Orange",
         "coordinates": [33.47833708183752, -117.72330055840274]
