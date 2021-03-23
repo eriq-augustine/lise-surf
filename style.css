@@ -10,3 +10,9 @@
     display: inline-block;
     margin: 0;
 }
+
+.info-area img {
+    width: 350px;
+    border-radius: 10px;
+    margin-top: 10px;
+}

@@ -24,7 +24,7 @@ const COUNTY_STROKE_WIDTH = '1px';
 const COUNTY_STROKE_COLOR = '#eee';
 
 const TOTAL_DAYS = 365;
-const START_TIME_MS = new Date('2020-04-26T00:00:00Z').getTime();
+const START_TIME_MS = new Date('2020-03-26T00:00:00Z').getTime();
 const END_TIME_MS = START_TIME_MS + (TOTAL_DAYS * 24 * 60 * 60 * 1000);
 const SECONDS_PER_DAY = 1.5;
 const TOTAL_DURATION_MS = SECONDS_PER_DAY * 365 * 1000;
@@ -136,6 +136,11 @@ function main() {
 
                 let beach = BEACHES[logEntry.location];
 
+                let beachImage = undefined;
+                if (beach.image) {
+                    beachImage = beach.image.path;
+                }
+
                 renderData.push({
                     'id': renderData.length,
                     'dayCount': dayCount,
@@ -145,6 +150,7 @@ function main() {
                     'county': beach.county,
                     'latitude': beach.coordinates[0],
                     'longitude': beach.coordinates[1],
+                    'image': beachImage,
                 });
             });
 
@@ -194,6 +200,12 @@ function main() {
                     document.querySelector('.info-area .beach').textContent = renderEntry.name;
                     document.querySelector('.info-area .city').textContent = renderEntry.city;
                     document.querySelector('.info-area .county').textContent = renderEntry.county;
+
+                    if (renderEntry.image) {
+                        document.querySelector('.info-area .beach-image').src = renderEntry.image;
+                    } else {
+                        document.querySelector('.info-area .beach-image').src = '';
+                    }
 
                     // Update the county color.
                     if (county) {
