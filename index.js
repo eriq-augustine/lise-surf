@@ -2,6 +2,7 @@
 
 const MAP_PATH = 'combined-states-counties.geojson';
 const LOG_PATH = 'surf-log.txt';
+// const LOG_PATH = 'test-surf-log.txt';
 
 const WIDTH = 960;
 const HEIGHT = 600;
@@ -34,7 +35,7 @@ const TRAVELER_DELAY_BEFORE_REMOVE_MS = 350;
 const ORIGIN_IMAGE_PATH = 'images/lise_getoor_circle.png';
 const ORIGIN_IMAGE_WIDTH = 150;
 const ORIGIN_IMAGE_HEIGHT = 150;
-const ORIGIN_POINT = [33, -126];
+const ORIGIN_POINT = [32, -124];
 
 const TRAVELER_IMAGE_PATH = 'images/surfboard.png';
 const TRAVELER_IMAGE_WIDTH = 30;
