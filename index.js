@@ -4,13 +4,13 @@ const MAP_PATH = 'combined-states-counties.geojson';
 const LOG_PATH = 'surf-log.txt';
 // const LOG_PATH = 'test-surf-log.txt';
 
-const WIDTH = 960;
-const HEIGHT = 600;
+const WIDTH = 1280;
+const HEIGHT = 720;
 
-const CENTER_X = 1450;
-const CENTER_Y = 350;
+const CENTER_X = 1900;
+const CENTER_Y = 450;
 
-const SCALE = 2750;
+const SCALE = 3000;
 
 const COUNTY_BASE_COLOR = '#45ADA8FF';
 const COUNTY_START_COLOR = '#00C3FF';
@@ -35,7 +35,7 @@ const TRAVELER_DELAY_BEFORE_REMOVE_MS = 350;
 const ORIGIN_IMAGE_PATH = 'images/lise_getoor_circle.png';
 const ORIGIN_IMAGE_WIDTH = 150;
 const ORIGIN_IMAGE_HEIGHT = 150;
-const ORIGIN_POINT = [32, -124];
+const ORIGIN_POINT = [600, 625];
 
 const TRAVELER_IMAGE_PATH = 'images/surfboard.png';
 const TRAVELER_IMAGE_WIDTH = 30;
@@ -76,8 +76,8 @@ function main() {
     svg.append('image')
             .attr('id', 'origin-image')
             .attr('xlink:href', ORIGIN_IMAGE_PATH)
-            .attr('x', projection([ORIGIN_POINT[1], ORIGIN_POINT[0]])[0] - ORIGIN_IMAGE_WIDTH / 2)
-            .attr('y', projection([ORIGIN_POINT[1], ORIGIN_POINT[0]])[1] - ORIGIN_IMAGE_HEIGHT / 2)
+            .attr('x', ORIGIN_POINT[0] - ORIGIN_IMAGE_WIDTH / 2)
+            .attr('y', ORIGIN_POINT[1] - ORIGIN_IMAGE_HEIGHT / 2)
             .attr('width', ORIGIN_IMAGE_WIDTH)
             .attr('height', ORIGIN_IMAGE_HEIGHT)
     ;
@@ -158,7 +158,7 @@ function main() {
             // Go through log entries one at a time.
             renderData.forEach(function(renderEntry) {
                 // Project onto the map.
-                let [sourceX, sourceY] = projection([ORIGIN_POINT[1], ORIGIN_POINT[0]]);
+                let [sourceX, sourceY] = [ORIGIN_POINT[1], ORIGIN_POINT[0]];
                 let [targetX, targetY] = projection([renderEntry.longitude, renderEntry.latitude]);
 
                 // Adjust for the image dimensions.
