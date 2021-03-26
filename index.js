@@ -25,7 +25,7 @@ const COUNTY_STROKE_WIDTH = '1px';
 const COUNTY_STROKE_COLOR = '#eee';
 
 const TOTAL_DAYS = 365;
-const START_TIME_MS = new Date('2020-03-26T00:00:00Z').getTime();
+const START_TIME_MS = new Date('2020-04-28T00:00:00Z').getTime();
 const END_TIME_MS = START_TIME_MS + (TOTAL_DAYS * 24 * 60 * 60 * 1000);
 const SECONDS_PER_DAY = 1.5;
 const TOTAL_DURATION_MS = SECONDS_PER_DAY * 365 * 1000;
@@ -127,6 +127,7 @@ function main() {
             let renderData = [];
             let dayCount = 0;
 
+            let seenBeaches = {};
             surfLog.forEach(function(logEntry) {
                 dayCount++;
 
@@ -136,6 +137,12 @@ function main() {
                 }
 
                 let beach = BEACHES[logEntry.location];
+
+                let specialEvent = undefined;
+                if (!seenBeaches[logEntry.location]) {
+                    specialEvent = `First Time at ${beach.name}!`;
+                    seenBeaches[logEntry.location] = 0;
+                }
 
                 let beachImage = undefined;
                 if (beach.image) {
@@ -152,7 +159,10 @@ function main() {
                     'latitude': beach.coordinates[0],
                     'longitude': beach.coordinates[1],
                     'image': beachImage,
+                    'specialEvent': specialEvent,
                 });
+
+                seenBeaches[logEntry.location] += 1;
             });
 
             // Go through log entries one at a time.
@@ -213,6 +223,28 @@ function main() {
                         let count = parseInt(county.dataset.visitCount, 10) + 1;
                         county.setAttribute('data-visitCount', count);
                         county.style.fill = countyColorScale(count);
+                    }
+
+                    // Mark special events.
+                    if (renderEntry.specialEvent) {
+                        let specialEventArea = document.querySelector('.special-event-area');
+                        let specialEventBanner = document.querySelector('.special-event-area p');
+
+                        if (specialEventBanner) {
+                            specialEventBanner.remove();
+                        }
+
+                        specialEventBanner = document.createElement('p');
+                        specialEventBanner.innerText = renderEntry.specialEvent;
+
+                        specialEventArea.classList.add('active');
+                        specialEventArea.classList.remove('inactive');
+                        specialEventArea.appendChild(specialEventBanner);
+                    } else {
+                        // Fade out old special events.
+                        let specialEventArea = document.querySelector('.special-event-area');
+                        specialEventArea.classList.remove('active');
+                        specialEventArea.classList.add('inactive');
                     }
 
                     // Keep the origin image on the top.
