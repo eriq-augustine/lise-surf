@@ -144,6 +144,14 @@ function main() {
                     seenBeaches[logEntry.location] = 0;
                 }
 
+                if (logEntry.event) {
+                    if (specialEvent) {
+                        specialEvent = `${logEntry.event} & ${specialEvent}`;
+                    } else {
+                        specialEvent = `${logEntry.event}!`;
+                    }
+                }
+
                 let beachImage = undefined;
                 if (beach.image) {
                     beachImage = beach.image.path;
