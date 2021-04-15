@@ -251,4 +251,14 @@ const BEACHES = {
             "source": "https://i.vimeocdn.com/video/683549522.jpg?mw=1920&mh=1080&q=70"
         }
     },
+    "Unknown": {
+        "name": "Somewhere in Santa Cruz",
+        "city": "Santa Cruz",
+        "county": "Santa Cruz",
+        "coordinates": [36.961652895291216, -122.0249019288201],
+        "image": {
+            "path": "images/beaches/santa-cruz.jpg",
+            "source": "https://images-mls.static-ziprealty.com/images_mls/CAREIL/81/68/53/81685357.jpg"
+        }
+    },
 }

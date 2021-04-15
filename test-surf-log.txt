@@ -1,51 +1,53 @@
-date	location	event	
-1588118400	15th	
-1588204800	15th	Test Event 1
-1588291200	36th	
-1588377600	36th	
-1588464000	Breakwater	Test Event 2
-1588550400	Breakwater	
-1588636800	Broad Beach	
-1588723200	Broad Beach	Test Event 3
-1588809600	Campus Point	
-1588896000	Campus Point	
-1588982400	Cardiff	
-1589068800	Cardiff	
-1589155200	Cowells	
-1589241600	Cowells	
-1589328000	C-Street	
-1589414400	C-Street	
-1589500800	Del Mar	
-1589587200	Del Mar	
-1589673600	Devereaux	
-1589760000	Devereaux	
-1589846400	Jacks	
-1589932800	Jacks	
-1590019200	La Jolla	
-1590105600	La Jolla	
-1590192000	Leadbetter	
-1590278400	Leadbetter	
-1590364800	Malibu	
-1590451200	Malibu	
-1590537600	Pipes	
-1590624000	Pipes	
-1590710400	Pismo	
-1590796800	Pismo	
-1590883200	Privates	
-1590969600	Privates	
-1591056000	Refugio	
-1591142400	Refugio	
-1591228800	Rincon	
-1591315200	Rincon	
-1591401600	SaltCreek	
-1591488000	SaltCreek	
-1591574400	San Onofre State Beach	
-1591660800	San Onofre State Beach	
-1591747200	Sharks	
-1591833600	Sharks	
-1591920000	Swamis	
-1592006400	Swamis	
-1592092800	Trails	
-1592179200	Trails	
-1592265600	Turtles	
-1592352000	Turtles	
+date	location	event	image
+1588118400	Unknown		images/photos/SurfTechBike.jpg
+1588204800	Unknown	Test Event 1	images/photos/SurfTechBike.jpg
+1588291200	15th		images/photos/EarlyAmBike.jpg
+1588377600	15th		images/photos/EarlyAmBike.jpg
+1588464000	36th	Test Event 2	images/photos/Birthday.jpg
+1588550400	36th		images/photos/Birthday.jpg
+1588636800	Breakwater		images/photos/CowellsSunset.jpg
+1588723200	Breakwater	Test Event 3	images/photos/CowellsSunset.jpg
+1588809600	Broad Beach		images/photos/RedBoardBike.jpg
+1588896000	Broad Beach		images/photos/RedBoardBike.jpg
+1588982400	Campus Point		images/photos/Floyd.jpg
+1589068800	Campus Point		images/photos/Floyd.jpg
+1589155200	Cardiff		images/photos/Van_Trip.jpg
+1589241600	Cardiff		images/photos/Van_Trip.jpg
+1589328000	Cowells		images/photos/PleasurePoint.jpg
+1589414400	Cowells		images/photos/PleasurePoint.jpg
+1589500800	C-Street		images/photos/SanOVan2.jpg
+1589587200	C-Street		images/photos/SanOVan2.jpg
+1589673600	Del Mar		images/photos/PleasurePoint.jpg
+1589760000	Del Mar		images/photos/PleasurePoint.jpg
+1589846400	Devereaux		images/photos/PipesVan.jpg
+1589932800	Devereaux		images/photos/PipesVan.jpg
+1590019200	Jacks		images/photos/PleasurePoint2.jpg
+1590105600	Jacks		images/photos/PleasurePoint2.jpg
+1590192000	La Jolla		images/photos/SanOVan.jpg
+1590278400	La Jolla		images/photos/SanOVan.jpg
+1590364800	Leadbetter		images/photos/TealBoardBikeRain
+1590451200	Leadbetter		images/photos/TealBoardBikeRain
+1590537600	Malibu		images/photos/Wetsuit.jpg
+1590624000	Malibu		images/photos/Wetsuit.jpg
+1590710400	Pipes		images/photos/RinConVan.jpg
+1590796800	Pipes		images/photos/RinConVan.jpg
+1590883200	Pismo		images/photos/PleasurePoint.jpg
+1590969600	Pismo		images/photos/PleasurePoint.jpg
+1591056000	Privates		images/photos/SurfVideos.jpg
+1591142400	Privates		images/photos/SurfVideos.jpg
+1591228800	Refugio		images/photos/PleasurePoint2.jpg
+1591315200	Refugio		images/photos/PleasurePoint2.jpg
+1591401600	Rincon		images/photos/SanOToes.jpg
+1591488000	Rincon		images/photos/SanOToes.jpg
+1591574400	SaltCreek		images/photos/PleasurePoint2.jpg
+1591660800	SaltCreek		images/photos/PleasurePoint2.jpg
+1591747200	San Onofre State Beach		
+1591833600	San Onofre State Beach		
+1591920000	Sharks		
+1592006400	Sharks		
+1592092800	Swamis		
+1592179200	Swamis		
+1592265600	Trails		
+1592352000	Trails		
+1592438400	Turtles		
+1592524800	Turtles		

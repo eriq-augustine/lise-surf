@@ -32,10 +32,7 @@ const TOTAL_DURATION_MS = SECONDS_PER_DAY * 365 * 1000;
 const TRAVELER_TRAVEL_DURATION_MS = SECONDS_PER_DAY * 1000;
 const TRAVELER_DELAY_BEFORE_REMOVE_MS = 350;
 
-const ORIGIN_IMAGE_PATH = 'images/lise_getoor_circle.png';
-const ORIGIN_IMAGE_WIDTH = 150;
-const ORIGIN_IMAGE_HEIGHT = 150;
-const ORIGIN_POINT = [600, 625];
+const ORIGIN_POINT = [600, 600];
 
 const TRAVELER_IMAGE_PATH = 'images/surfboard.png';
 const TRAVELER_IMAGE_WIDTH = 30;
@@ -71,16 +68,6 @@ function main() {
             .append('svg')
             .attr('width', WIDTH)
             .attr('height', HEIGHT);
-
-    // Add in the origin image.
-    svg.append('image')
-            .attr('id', 'origin-image')
-            .attr('xlink:href', ORIGIN_IMAGE_PATH)
-            .attr('x', ORIGIN_POINT[0] - ORIGIN_IMAGE_WIDTH / 2)
-            .attr('y', ORIGIN_POINT[1] - ORIGIN_IMAGE_HEIGHT / 2)
-            .attr('width', ORIGIN_IMAGE_WIDTH)
-            .attr('height', ORIGIN_IMAGE_HEIGHT)
-    ;
 
     // Load GeoJSON data and merge with states data
     d3.json(MAP_PATH).then(function(mapGeoJSON) {
@@ -152,6 +139,11 @@ function main() {
                     }
                 }
 
+                let photo = undefined;
+                if (logEntry.image) {
+                    photo = logEntry.image;
+                }
+
                 let beachImage = undefined;
                 if (beach.image) {
                     beachImage = beach.image.path;
@@ -166,7 +158,8 @@ function main() {
                     'county': beach.county,
                     'latitude': beach.coordinates[0],
                     'longitude': beach.coordinates[1],
-                    'image': beachImage,
+                    'beachImage': beachImage,
+                    'photo': photo,
                     'specialEvent': specialEvent,
                 });
 
@@ -220,8 +213,8 @@ function main() {
                     document.querySelector('.info-area .city').textContent = renderEntry.city;
                     document.querySelector('.info-area .county').textContent = renderEntry.county;
 
-                    if (renderEntry.image) {
-                        document.querySelector('.info-area .beach-image').src = renderEntry.image;
+                    if (renderEntry.beachImage) {
+                        document.querySelector('.info-area .beach-image').src = renderEntry.beachImage;
                     } else {
                         document.querySelector('.info-area .beach-image').src = '';
                     }
@@ -255,8 +248,10 @@ function main() {
                         specialEventArea.classList.add('inactive');
                     }
 
-                    // Keep the origin image on the top.
-                    svg.select('#origin-image').raise();
+                    // Change the photo.
+                    if (renderEntry.photo) {
+                        document.querySelector('img.photo').src = renderEntry.photo;
+                    }
 
                 }, timeScale(new Date(renderEntry.timestamp * 1000)));
             });
