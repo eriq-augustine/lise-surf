@@ -352,15 +352,15 @@ date	location	event	image
 1618358400	Sharks		images/photos/PleasurePoint2.jpg
 1618444800	Sharks		images/photos/PleasurePoint2.jpg
 1618531200	Cowells		images/photos/PleasurePoint2.jpg
-1618617600	Unknown		
-1618704000	Unknown		
-1618790400	Unknown		
-1618876800	Unknown		
-1618963200	Unknown		
-1619049600	Unknown		
-1619136000	Unknown		
-1619222400	Unknown		
-1619308800	Unknown		
-1619395200	Unknown		
-1619481600	Unknown		
-1619568000	Unknown	1 Year	
+1618617600	Privates		images/photos/PleasurePoint2.jpg
+1618704000	Privates		images/photos/PleasurePoint2.jpg
+1618790400	Sharks	New Board	images/photos/PleasurePoint2.jpg
+1618876800	Sharks		images/photos/PleasurePoint2.jpg
+1618963200	Sharks		images/photos/PleasurePoint2.jpg
+1619049600	Privates		images/photos/PleasurePoint2.jpg
+1619136000	Cowells		images/photos/PleasurePoint2.jpg
+1619222400	Sharks		images/photos/PleasurePoint2.jpg
+1619308800	Privates		images/photos/PleasurePoint2.jpg
+1619395200	Privates		images/photos/PleasurePoint2.jpg
+1619481600	Cowells		images/photos/PleasurePoint2.jpg
+1619568000	Cowells	365 Days!!	images/beaches/santa-cruz.jpg
